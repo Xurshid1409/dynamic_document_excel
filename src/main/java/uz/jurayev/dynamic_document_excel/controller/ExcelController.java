@@ -1,6 +1,5 @@
 package uz.jurayev.dynamic_document_excel.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -29,7 +28,7 @@ public class ExcelController {
     }
 
     @PostMapping(value = "exportToExcel")
-    @Operation(description = "Экспорт записей в excel")
+//    @Operation(description = "Экспорт записей в excel")
     public ResponseEntity<Resource> objectsToExcel(Object[] objects) {
 
         String filename = "report.xlsx";
