@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -36,12 +37,11 @@ public class ExcelUtil {
             for (int col = 1; col < fields.length; col++) {
                 Cell cell = headerRow.createCell(col);
                 cell.setCellStyle(cellStyle);
-
-                String absoluteFieldName = String.valueOf(fields[col]);
-                String fieldName = absoluteFieldName.substring(absoluteFieldName.lastIndexOf(".") + 1);
+                String fieldName = fields[col].getName();
                 cell.setCellValue(camelToSnake(fieldName));
             }
 
+            // Body
             int rowIdx = 1;
             ObjectMapper objectMapper = new ObjectMapper();
             for (Object object : objects) {
@@ -50,18 +50,15 @@ public class ExcelUtil {
                 String s = objectMapper.writeValueAsString(object);
                 JsonNode jsonNode = objectMapper.readTree(s);
                 for (int col = 1; col < fields.length; col++) {
-                    String absoluteFieldName = String.valueOf(fields[col]);
-                    String fieldName = absoluteFieldName.substring(absoluteFieldName.lastIndexOf(".") + 1);
+                    String fieldName = fields[col].getName();
                     JsonNode data = jsonNode.get(fieldName);
-                    if (data != NullNode.getInstance()) {
-                        String customerName = data.get("customer_name").toString();
-                        row.createCell(col).setCellValue(customerName);
-                    }
+                    row.createCell(col).setCellValue(data.toString());
                 }
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
         }
     }
