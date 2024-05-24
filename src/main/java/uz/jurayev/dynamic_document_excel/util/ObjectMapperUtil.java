@@ -9,6 +9,10 @@ import java.io.InputStream;
 
 public class ObjectMapperUtil {
 
+    public static ObjectMapper newInstance() {
+        return new ObjectMapper();
+    }
+
     public static String objectToJson(Object obj) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -53,9 +57,4 @@ public class ObjectMapperUtil {
             throw new RuntimeException(e);
         }
     }
-
-
-
-
-
 }
