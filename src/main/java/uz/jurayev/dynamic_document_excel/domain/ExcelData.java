@@ -13,7 +13,7 @@ import java.util.Map;
 @Entity
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
-@Table(name = "excel_data")
+@Table(name = "excel_data", schema = "documents")
 public class ExcelData implements Serializable {
 
     @Id
@@ -23,6 +23,6 @@ public class ExcelData implements Serializable {
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<Object, Object> data;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String text;
 }
