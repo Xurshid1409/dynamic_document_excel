@@ -2,6 +2,7 @@ package uz.jurayev.dynamic_document_excel.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.NullNode;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.ByteArrayInputStream;
@@ -17,7 +18,7 @@ public class ExcelUtil {
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-            Sheet sheet = workbook.createSheet("Vip clients");
+            Sheet sheet = workbook.createSheet("Sheet");
             Class<?> aClass = objects[0].getClass();
             Field[] fields = aClass.getDeclaredFields();
 
@@ -48,13 +49,14 @@ public class ExcelUtil {
 
                 String s = objectMapper.writeValueAsString(object);
                 JsonNode jsonNode = objectMapper.readTree(s);
-//                JSONObject jsonObject = new JSONObject(s);
                 for (int col = 1; col < fields.length; col++) {
                     String absoluteFieldName = String.valueOf(fields[col]);
                     String fieldName = absoluteFieldName.substring(absoluteFieldName.lastIndexOf(".") + 1);
-//                    String value = jsonObject.get(fieldName).toString();
-                    String value = jsonNode.get(fieldName).asText();
-                    row.createCell(col).setCellValue(value);
+                    JsonNode data = jsonNode.get(fieldName);
+                    if (data != NullNode.getInstance()) {
+                        String customerName = data.get("customer_name").toString();
+                        row.createCell(col).setCellValue(customerName);
+                    }
                 }
             }
             workbook.write(out);
