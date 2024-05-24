@@ -20,6 +20,7 @@ public class ExcelService {
 
     private final ExcelDataRepository excelDataRepository;
 
+
     @Transactional
     public String excelToObjects(InputStream is) {
 
@@ -39,10 +40,11 @@ public class ExcelService {
         }
     }
 
-    public ByteArrayInputStream objectsToExcel(Object[] objects) {
+    public ByteArrayInputStream objectsToExcel() {
 
         try {
-            return ExcelUtil.objectsToExcel(objects);
+            List<ExcelData> dataList = excelDataRepository.findAll();
+            return ExcelUtil.objectsToExcel(dataList.toArray(new ExcelData[0]));
         }
         catch (RuntimeException e) {
             throw new ErrorException(ResponseMessage.ERROR.getMessage());

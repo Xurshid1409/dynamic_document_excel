@@ -30,10 +30,10 @@ public class ExcelController {
 
     @PostMapping(value = "exportToExcel")
     @Operation(description = "Экспорт записей в excel")
-    public ResponseEntity<Resource> objectsToExcel(Object[] objects) {
+    public ResponseEntity<Resource> objectsToExcel() {
 
         String filename = "report.xlsx";
-        InputStreamResource resource = new InputStreamResource(excelService.objectsToExcel(objects));
+        InputStreamResource resource = new InputStreamResource(excelService.objectsToExcel());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(resource);
