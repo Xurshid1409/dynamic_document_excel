@@ -1,5 +1,6 @@
 package uz.jurayev.dynamic_document_excel.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -22,13 +23,13 @@ public class ExcelController {
     private final ExcelService excelService;
 
     @PostMapping(value = "importFromExcel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    @Operation(description = "Импорт записей с excel")
+    @Operation(description = "Импорт записей с excel")
     public String excelToObjects(@RequestParam("file") MultipartFile file) throws IOException {
         return excelService.excelToObjects(file.getInputStream());
     }
 
     @PostMapping(value = "exportToExcel")
-//    @Operation(description = "Экспорт записей в excel")
+    @Operation(description = "Экспорт записей в excel")
     public ResponseEntity<Resource> objectsToExcel(Object[] objects) {
 
         String filename = "report.xlsx";
